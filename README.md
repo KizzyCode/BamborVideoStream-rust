@@ -1,10 +1,12 @@
 [![License BSD-2-Clause](https://img.shields.io/badge/License-BSD--2--Clause-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![AppVeyor CI](https://ci.appveyor.com/api/projects/status/github/KizzyCode/BamborVideoStream-rust?svg=true)](https://ci.appveyor.com/project/KizzyCode/BamborVideoStream-rust)
+<!--
 [![docs.rs](https://docs.rs/bamborvideostream/badge.svg)](https://docs.rs/bamborvideostream)
 [![crates.io](https://img.shields.io/crates/v/bamborvideostream.svg)](https://crates.io/crates/bamborvideostream)
 [![Download numbers](https://img.shields.io/crates/d/bamborvideostream.svg)](https://crates.io/crates/bamborvideostream)
 [![dependency status](https://deps.rs/crate/bamborvideostream/latest/status.svg)](https://deps.rs/crate/bamborvideostream)
+-->
 
 
 # `BamborVideoStream`
