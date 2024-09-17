@@ -28,7 +28,7 @@ default = []
 ehttpd = { version = "0.8.2", default-features = false }
 ehttpd-querystring = { version = "0.2.0", default-features = false }
 native-tls = { version = "0.2.12", default-features = false }
-sha2 = { version = "0.10.8", default-features = false, features = ["asm", "std"] }
+sha2 = { version = "0.10.8", default-features = false, features = ["std"] }
 
 [dev-dependencies]
 
