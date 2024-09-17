@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>P1P/P1S</title>
+
+        <script src="loading.js">
+            /* Loading image indicator */
+        </script>
+        <script src="p1.js">
+            /* Main script */
+        </script>
+
+        <style>
+            body {
+                /* Layout */
+                margin: 0;
+                /* Design */
+                background-color: rgb(50, 50, 50);
+                color: white;
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 20px;
+            }
+
+            #play-images {
+                /* Layout */
+                margin: 20px;
+                width: calc(100vw - 40px);
+                height: calc(100vh - 40px);
+            }
+            #play-images-image {
+                /* Layout */
+                margin: 0;
+                width: 100%;
+                height: calc(100% - 30px);
+                object-fit: contain;
+            }
+            #play-images-deviceaddress {
+                /* Layout */
+                margin: 0;
+                width: 100%;
+                line-height: 30px;
+                text-align: center;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="loading">
+            <!-- Display loading info -->
+            <p>Loading...</p>
+        </div>
+        <div id="init-session" style="display: none;">
+            <!-- Login form -->
+            <form id="init-session-form" method="post">
+                <p>Address: <input type="text" id="init-session-address"/></p>
+                <p>PIN: <input type="password" id="init-session-pin"/></p>
+                <p>API key: <input type="password" id="init-session-auth"/></p>
+                <p><input type="submit" value="Login"></p>
+            </form>
+        </div>
+        <div id="play-images" style="display: none;">
+            <!-- Image view -->
+            <image id="play-images-image"/>
+            <div id="play-images-deviceaddress">Device Address</div>
+        </div>
+        <script>
+            /* Init library */
+            init();
+        </script>
+    </body>
+</html>
