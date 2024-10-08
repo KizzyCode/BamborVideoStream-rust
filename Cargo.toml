@@ -1,6 +1,6 @@
 [package]
 name = "bamborvideostream"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["KizzyCode Software Labs./Keziah Biermann <development@kizzycode.de>"]
 keywords = []
@@ -25,8 +25,8 @@ default = []
 
 
 [dependencies]
-ehttpd = { version = "0.8.2", default-features = false }
-ehttpd-querystring = { version = "0.2.0", default-features = false }
+ehttpd = { version = "0.9.0", default-features = false, features = ["server"] }
+ehttpd-querystring = { version = "0.2.1", default-features = false }
 native-tls = { version = "0.2.12", default-features = false }
 sha2 = { version = "0.10.8", default-features = false, features = ["std"] }
 
