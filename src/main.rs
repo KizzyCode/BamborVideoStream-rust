@@ -17,31 +17,26 @@ mod error;
 mod services;
 mod v1;
 
-use crate::{error::Error, services::config::Config};
-use ehttpd::{
-    http::{Request, Response, ResponseExt},
-    Server,
-};
-use std::{process, sync::Arc};
+use crate::error::Error;
+use crate::services::config::Config;
+use ehttpd::http::{Request, Response, ResponseExt};
+use ehttpd::Server;
+use std::process;
+use std::sync::Arc;
 
 /// Routes incoming requests
 fn route(request: Request, config: &Arc<Config>) -> Response {
     // Route request
     let is_head = request.method == b"HEAD";
     let maybe_response: Result<Response, Error> = match (request.method.as_ref(), request.target.as_ref()) {
-        // Authed endpoints
         (b"POST", target) if target.starts_with(b"/v1/p1") => {
-            // Call endpoint via auth bridge
-            v1::authed::call(v1::authed::p1::post, request, config)
+            // Serve video data
+            v1::p1::post(request, config)
         }
-
-        // Site URLs
         (b"HEAD" | b"GET", target) if target.starts_with(b"/site/") => {
-            // Call endpoint directly
+            // Deliver site data
             v1::site::handle(request)
         }
-
-        // Fallback URLs
         (b"HEAD" | b"GET", b"/") => {
             // Redirect to main site URL
             Ok(Response::new_307_temporaryredirect(b"/site/app.html"))

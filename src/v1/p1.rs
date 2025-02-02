@@ -1,13 +1,12 @@
 //! Gets the last JPEG for the given P1 device
 
-use crate::{
-    error::Error,
-    services::{config::Config, p1::P1Service},
-    v1::authed::AuthTicket,
-};
+use crate::error::Error;
+use crate::services::config::Config;
+use crate::services::p1::P1Service;
 use core::str;
 use ehttpd::http::{Request, Response, ResponseExt};
-use ehttpd_querystring::{querystringext::QueryStringExt, RequestQuerystringExt};
+use ehttpd_querystring::querystringext::QueryStringExt;
+use ehttpd_querystring::RequestQuerystringExt;
 use std::sync::{Arc, Weak};
 
 /// Gets the service for the given P1 device
@@ -33,7 +32,7 @@ fn image_service(address: &str, pin: &str) -> Arc<P1Service> {
 }
 
 /// Gets the last JPEG for the given P1 device
-pub fn post(request: Request, _: &Arc<Config>, _: AuthTicket) -> Result<Response, Error> {
+pub fn post(request: Request, _: &Arc<Config>) -> Result<Response, Error> {
     /// The name of the device address field
     const DEVICEADDRESS_FIELD: &[u8] = b"address";
     /// The name of the device PIN field

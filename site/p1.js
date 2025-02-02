@@ -63,11 +63,9 @@ function init_session_onsubmit(event) {
         (document.getElementById("init-session-address"));
     const pin =  /** @type {HTMLInputElement} */
         (document.getElementById("init-session-pin"));
-    const auth =  /** @type {HTMLInputElement} */
-        (document.getElementById("init-session-auth"));
 
     // Build and encode the login info
-    const login_object = { "address": address.value, "pin": pin.value, "auth": auth.value };
+    const login_object = { "address": address.value, "pin": pin.value };
     const login_json = JSON.stringify(login_object);
     const login = btoa(login_json);
 
@@ -79,11 +77,10 @@ function init_session_onsubmit(event) {
 /**
  * Displays the component to play the images and starts the background-task
  * 
- * @param {string} auth The API auth token
  * @param {string} address The device address
  * @param {string} pin The device PIN
  */
-function play_images(auth, address, pin) {
+function play_images(address, pin) {
     // Set loading image
     const image = /** @type {HTMLImageElement} */
         (document.getElementById("play-images-image"));
@@ -97,20 +94,19 @@ function play_images(auth, address, pin) {
 
     // Show the playback div and start the playback
     switch_component("loading", "play-images")
-    setInterval(() => play_images_fetch(auth, address, pin, play_images_show), FRAME_DURATION_MS);
+    setInterval(() => play_images_fetch(address, pin, play_images_show), FRAME_DURATION_MS);
 }
 
 /**
  * Displays the component to play the images and starts the background-task
  * 
- * @param {string} auth The API auth token
  * @param {string} address The device address
  * @param {string} pin The device PIN
  * @param {function} onCompletion The callback function for when the task is completed
  */
-function play_images_fetch(auth, address, pin, onCompletion) {
+function play_images_fetch(address, pin, onCompletion) {
     // Build query string
-    const query_string_obj = new URLSearchParams({ auth: auth, address: address, pin: pin });
+    const query_string_obj = new URLSearchParams({ address: address, pin: pin });
     const query_string = query_string_obj.toString();
     
     // Fetch the new image
@@ -157,10 +153,9 @@ function init() {
         // If there is a session, then load it
         const address = session["address"] ?? fail("no session address");
         const pin = session["pin"] ?? fail("no session PIN");
-        const auth = session["auth"] ?? '';
 
         // Display images
-        play_images(auth, address, pin);
+        play_images(address, pin);
     } catch (e) {
         // Init session
         console.log("Failed to recover session: " + e);

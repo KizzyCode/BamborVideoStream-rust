@@ -1,4 +1,4 @@
 //! The v1 API
 
-pub mod authed;
+pub mod p1;
 pub mod site;
