@@ -1,18 +1,20 @@
 //! A TLS connection to a P1 device
 
-use crate::{error, error::Error};
-use native_tls::{Protocol, TlsConnector, TlsStream};
-use std::{
-    io::{Read, Write},
-    net::TcpStream,
-    time::Duration,
-};
+use crate::error;
+use crate::error::Error;
+use crate::services::p1::tls::DangerousAcceptAnyCert;
+use rustls::pki_types::ServerName;
+use rustls::{ClientConfig, ClientConnection, StreamOwned};
+use std::io::{Read, Write};
+use std::net::TcpStream;
+use std::sync::Arc;
+use std::time::Duration;
 
 /// A TLS connection to a P1 device
 #[derive(Debug)]
 pub struct P1Connection {
     /// The TLS connection
-    connection: TlsStream<TcpStream>,
+    connection: StreamOwned<ClientConnection, TcpStream>,
 }
 impl P1Connection {
     /// The default timeout
@@ -20,19 +22,24 @@ impl P1Connection {
 
     /// Creates a new connection to a P1 device
     pub fn new(address: &str) -> Result<Self, Error> {
-        // Connect to the device
-        let connection = TcpStream::connect(address)?;
-        connection.set_read_timeout(Some(Self::DEFAULT_TIMEOUT))?;
-        connection.set_write_timeout(Some(Self::DEFAULT_TIMEOUT))?;
+        // Create TLS config
+        let dangerous_accept_any_cert = Arc::new(DangerousAcceptAnyCert);
+        let tls_config = (ClientConfig::builder().dangerous())
+            .with_custom_certificate_verifier(dangerous_accept_any_cert)
+            .with_no_client_auth();
 
-        // Create a TLS stream from the TCP connection
-        let tls = TlsConnector::builder()
-            .danger_accept_invalid_certs(true)
-            .min_protocol_version(Some(Protocol::Tlsv12))
-            .build()?;
-        let connection = tls.connect(address, connection)?;
+        // Connect to the device
+        let tcp = TcpStream::connect(address)?;
+        tcp.set_read_timeout(Some(Self::DEFAULT_TIMEOUT))?;
+        tcp.set_write_timeout(Some(Self::DEFAULT_TIMEOUT))?;
+
+        // Connect to P1S
+        let tls_config = Arc::new(tls_config);
+        let address = tcp.peer_addr().map(|a| a.ip()).map(ServerName::from)?;
+        let tls = ClientConnection::new(tls_config, address)?;
 
         // Init self
+        let connection = StreamOwned::new(tls, tcp);
         Ok(Self { connection })
     }
 
@@ -79,7 +86,7 @@ impl P1Connection {
 #[derive(Debug)]
 pub struct P1Session {
     /// The TLS connection
-    connection: TlsStream<TcpStream>,
+    connection: StreamOwned<ClientConnection, TcpStream>,
 }
 impl P1Session {
     /// Receives a JPEG image from the device

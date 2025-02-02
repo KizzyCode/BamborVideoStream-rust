@@ -1,14 +1,14 @@
 //! An image service for a P1S/P1P client
 
 mod connection;
+mod tls;
 
-use crate::{error::Error, services::p1::connection::P1Connection};
-use std::{
-    collections::BTreeMap,
-    sync::{Arc, LazyLock, Mutex, Weak},
-    thread,
-    time::Duration,
-};
+use crate::error::Error;
+use crate::services::p1::connection::P1Connection;
+use std::collections::BTreeMap;
+use std::sync::{Arc, LazyLock, Mutex, Weak};
+use std::thread;
+use std::time::Duration;
 
 /// A service for a P1S/P1P client
 #[derive(Debug)]

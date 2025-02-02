@@ -1,9 +1,7 @@
 //! Implements the crate's error type
 
-use std::{
-    backtrace::{Backtrace, BacktraceStatus},
-    fmt::{self, Debug, Display, Formatter},
-};
+use std::backtrace::{Backtrace, BacktraceStatus};
+use std::fmt::{self, Debug, Display, Formatter};
 
 /// Creates a new error
 #[macro_export]
@@ -75,17 +73,14 @@ impl From<ehttpd::error::Error> for Error {
         error!(with: error, "HTTP server error")
     }
 }
-impl From<native_tls::Error> for Error {
-    fn from(error: native_tls::Error) -> Self {
+impl From<rustls::Error> for Error {
+    fn from(error: rustls::Error) -> Self {
         error!(with: error, "TLS error")
     }
 }
-impl<T> From<native_tls::HandshakeError<T>> for Error
-where
-    T: Debug + Send + 'static,
-{
-    fn from(error: native_tls::HandshakeError<T>) -> Self {
-        error!(with: error, "TLS handshake error")
+impl From<rustls::pki_types::InvalidDnsNameError> for Error {
+    fn from(error: rustls::pki_types::InvalidDnsNameError) -> Self {
+        error!(with: error, "DNS name error")
     }
 }
 impl From<std::num::ParseIntError> for Error {
